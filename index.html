@@ -1,0 +1,750 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Auto Legends</title>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #0b0b0f;
+            color: white;
+        }
+
+        header {
+            background: linear-gradient(135deg, #111118, #1c1c28);
+            padding: 25px 15px;
+            text-align: center;
+            border-bottom: 2px solid #ff3131;
+        }
+
+        header h1 {
+            font-size: 34px;
+            color: #ff3131;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #aaa;
+            font-size: 15px;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .cars {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .car {
+            background: #15151d;
+            border-radius: 18px;
+            overflow: hidden;
+            border: 1px solid #292936;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+            transition: 0.3s;
+        }
+
+        .car:hover {
+            transform: translateY(-7px);
+            border-color: #ff3131;
+            box-shadow: 0 15px 35px rgba(255,49,49,0.15);
+        }
+
+        .car img {
+            width: 100%;
+            height: 210px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .car-content {
+            padding: 20px;
+        }
+
+        .car h2 {
+            font-size: 23px;
+            margin-bottom: 8px;
+        }
+
+        .year {
+            color: #888;
+            margin-bottom: 15px;
+        }
+
+        .details-btn {
+            width: 100%;
+            border: none;
+            padding: 13px;
+            border-radius: 10px;
+            background: #ff3131;
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.25s;
+        }
+
+        .details-btn:hover {
+            background: #ff5050;
+            transform: scale(1.02);
+        }
+
+        /* МОДАЛЬНОЕ ОКНО */
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.82);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-box {
+            width: 100%;
+            max-width: 650px;
+            max-height: 90vh;
+            overflow-y: auto;
+            background: #15151d;
+            border-radius: 20px;
+            border: 1px solid #333342;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.7);
+            animation: showModal 0.25s ease;
+        }
+
+        @keyframes showModal {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .modal-img {
+            width: 100%;
+            height: 280px;
+            object-fit: cover;
+        }
+
+        .modal-content {
+            padding: 25px;
+        }
+
+        .modal-content h2 {
+            font-size: 30px;
+            color: #ff3131;
+            margin-bottom: 5px;
+        }
+
+        .modal-content .subtitle {
+            color: #999;
+            margin-bottom: 20px;
+        }
+
+        .specs {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-bottom: 22px;
+        }
+
+        .spec {
+            background: #20202a;
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .spec-title {
+            color: #888;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+
+        .spec-value {
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        .description {
+            color: #ccc;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .close-btn {
+            width: 100%;
+            border: none;
+            padding: 13px;
+            border-radius: 10px;
+            background: #292936;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .close-btn:hover {
+            background: #3a3a48;
+        }
+
+        footer {
+            text-align: center;
+            color: #666;
+            padding: 30px 15px;
+            margin-top: 30px;
+        }
+
+        @media (max-width: 500px) {
+
+            header h1 {
+                font-size: 28px;
+            }
+
+            .specs {
+                grid-template-columns: 1fr;
+            }
+
+            .modal-img {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>🚗 AUTO LEGENDS</h1>
+    <p>Легендарные автомобили и их характеристики</p>
+</header>
+
+<div class="container">
+
+    <div class="cars">
+
+        <!-- NISSAN -->
+
+        <div class="car">
+
+            <img
+                src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Skyline_R34_GT-R.jpg"
+                alt="Nissan Skyline GT-R R34"
+            >
+
+            <div class="car-content">
+
+                <h2>Nissan Skyline GT-R R34</h2>
+
+                <div class="year">
+                    1999–2002
+                </div>
+
+                <button class="details-btn"
+                        onclick="showCar('skyline')">
+                    Подробнее
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- SUPRA -->
+
+        <div class="car">
+
+            <img
+                src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Toyota_Supra_(A80)_front.JPG"
+                alt="Toyota Supra A80"
+            >
+
+            <div class="car-content">
+
+                <h2>Toyota Supra MK4</h2>
+
+                <div class="year">
+                    A80
+                </div>
+
+                <button class="details-btn"
+                        onclick="showCar('supra')">
+                    Подробнее
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- MUSTANG -->
+
+        <div class="car">
+
+            <img
+                src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Ford_Mustang_GT_2015._(26264401122).jpg"
+                alt="Ford Mustang GT"
+            >
+
+            <div class="car-content">
+
+                <h2>Ford Mustang GT</h2>
+
+                <div class="year">
+                    2015
+                </div>
+
+                <button class="details-btn"
+                        onclick="showCar('mustang')">
+                    Подробнее
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- BMW -->
+
+        <div class="car">
+
+            <img
+                src="https://commons.wikimedia.org/wiki/Special:Redirect/file/BMW_M3_E46.jpg"
+                alt="BMW M3 E46"
+            >
+
+            <div class="car-content">
+
+                <h2>BMW M3 E46</h2>
+
+                <div class="year">
+                    2000–2006
+                </div>
+
+                <button class="details-btn"
+                        onclick="showCar('m3')">
+                    Подробнее
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- 370Z -->
+
+        <div class="car">
+
+            <img
+                src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Nissan_370Z.jpg"
+                alt="Nissan 370Z"
+            >
+
+            <div class="car-content">
+
+                <h2>Nissan 370Z</h2>
+
+                <div class="year">
+                    2009–2020
+                </div>
+
+                <button class="details-btn"
+                        onclick="showCar('370z')">
+                    Подробнее
+                </button>
+
+            </div>
+        </div>
+
+
+        <!-- LAMBORGHINI -->
+
+        <div class="car">
+
+            <img
+                src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Lamborghini_Huracan.jpg"
+                alt="Lamborghini Huracán"
+            >
+
+            <div class="car-content">
+
+                <h2>Lamborghini Huracán</h2>
+
+                <div class="year">
+                    2014+
+                </div>
+
+                <button class="details-btn"
+                        onclick="showCar('huracan')">
+                    Подробнее
+                </button>
+
+            </div>
+        </div>
+
+    </div>
+</div>
+
+
+<footer>
+    © 2026 Auto Legends
+</footer>
+
+
+<!-- МОДАЛЬНОЕ ОКНО -->
+
+<div class="modal" id="carModal">
+
+    <div class="modal-box">
+
+        <img
+            id="modalImage"
+            class="modal-img"
+            src=""
+            alt=""
+        >
+
+        <div class="modal-content">
+
+            <h2 id="modalTitle"></h2>
+
+            <div
+                id="modalSubtitle"
+                class="subtitle">
+            </div>
+
+
+            <div class="specs">
+
+                <div class="spec">
+
+                    <div class="spec-title">
+                        Двигатель
+                    </div>
+
+                    <div
+                        id="engine"
+                        class="spec-value">
+                    </div>
+
+                </div>
+
+
+                <div class="spec">
+
+                    <div class="spec-title">
+                        Мощность
+                    </div>
+
+                    <div
+                        id="power"
+                        class="spec-value">
+                    </div>
+
+                </div>
+
+
+                <div class="spec">
+
+                    <div class="spec-title">
+                        Максимальная скорость
+                    </div>
+
+                    <div
+                        id="speed"
+                        class="spec-value">
+                    </div>
+
+                </div>
+
+
+                <div class="spec">
+
+                    <div class="spec-title">
+                        Привод
+                    </div>
+
+                    <div
+                        id="drive"
+                        class="spec-value">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div
+                id="description"
+                class="description">
+            </div>
+
+
+            <button
+                class="close-btn"
+                onclick="closeModal()">
+
+                Закрыть
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    const cars = {
+
+        skyline: {
+
+            title: "Nissan Skyline GT-R R34",
+
+            subtitle: "Легендарный японский спорткар",
+
+            image:
+                "https://commons.wikimedia.org/wiki/Special:Redirect/file/Skyline_R34_GT-R.jpg",
+
+            engine:
+                "RB26DETT 2.6L R6 Twin Turbo",
+
+            power:
+                "280 л.с.",
+
+            speed:
+                "≈250 км/ч",
+
+            drive:
+                "Полный привод ATTESA E-TS",
+
+            description:
+                "Nissan Skyline GT-R R34 — одна из самых известных японских спортивных машин. Автомобиль оснащён легендарным рядным шестицилиндровым двигателем RB26DETT объёмом 2.6 литра с двойным турбонаддувом. Заводская заявленная мощность — 280 л.с."
+        },
+
+
+        supra: {
+
+            title: "Toyota Supra MK4",
+
+            subtitle: "Toyota Supra A80",
+
+            image:
+                "https://commons.wikimedia.org/wiki/Special:Redirect/file/Toyota_Supra_(A80)_front.JPG",
+
+            engine:
+                "2JZ-GTE 3.0L R6 Twin Turbo",
+
+            power:
+                "≈280 л.с.",
+
+            speed:
+                "≈250 км/ч",
+
+            drive:
+                "Задний",
+
+            description:
+                "Toyota Supra MK4 поколения A80 стала настоящей легендой японского автопрома. Версия с двигателем 2JZ-GTE получила 3-литровую рядную шестёрку с двумя турбинами и задний привод. Огромный потенциал для тюнинга сделал Supra одной из самых известных машин в мире."
+        },
+
+
+        mustang: {
+
+            title: "Ford Mustang GT",
+
+            subtitle: "Американский V8",
+
+            image:
+                "https://commons.wikimedia.org/wiki/Special:Redirect/file/Ford_Mustang_GT_2015._(26264401122).jpg",
+
+            engine:
+                "5.0L V8",
+
+            power:
+                "≈435 л.с.",
+
+            speed:
+                "≈250 км/ч",
+
+            drive:
+                "Задний",
+
+            description:
+                "Ford Mustang GT — классический американский спортивный автомобиль. В этой версии используется атмосферный бензиновый V8 объёмом 5.0 литра. В отличие от Skyline и Supra, здесь нет Twin Turbo — двигатель использует естественный впуск."
+        },
+
+
+        m3: {
+
+            title: "BMW M3 E46",
+
+            subtitle: "Одна из самых известных M-моделей BMW",
+
+            image:
+                "https://commons.wikimedia.org/wiki/Special:Redirect/file/BMW_M3_E46.jpg",
+
+            engine:
+                "S54 3.2L R6",
+
+            power:
+                "≈343 л.с.",
+
+            speed:
+                "250 км/ч",
+
+            drive:
+                "Задний",
+
+            description:
+                "BMW M3 E46 известна своим высокооборотистым атмосферным двигателем S54. Рядная шестицилиндровая силовая установка объёмом 3.2 литра не использует турбонаддув. Это одна из причин, почему E46 M3 считается особенной среди спортивных BMW."
+        },
+
+
+        "370z": {
+
+            title: "Nissan 370Z",
+
+            subtitle: "Японское спортивное купе",
+
+            image:
+                "https://commons.wikimedia.org/wiki/Special:Redirect/file/Nissan_370Z.jpg",
+
+            engine:
+                "3.7L V6",
+
+            power:
+                "≈332 л.с.",
+
+            speed:
+                "≈250 км/ч",
+
+            drive:
+                "Задний",
+
+            description:
+                "Nissan 370Z — компактное спортивное купе с атмосферным V6 объёмом 3.7 литра. Автомобиль получил классическую заднеприводную компоновку и известен своим характерным звуком V6."
+        },
+
+
+        huracan: {
+
+            title: "Lamborghini Huracán",
+
+            subtitle: "Итальянский суперкар",
+
+            image:
+                "https://commons.wikimedia.org/wiki/Special:Redirect/file/Lamborghini_Huracan.jpg",
+
+            engine:
+                "5.2L V10",
+
+            power:
+                "≈610 л.с.",
+
+            speed:
+                "≈325 км/ч",
+
+            drive:
+                "Полный",
+
+            description:
+                "Lamborghini Huracán — современный итальянский суперкар с атмосферным V10 объёмом 5.2 литра. Двигатель не использует турбонаддув. Благодаря высокой мощности и полному приводу автомобиль способен развивать скорость более 300 км/ч."
+        }
+
+    };
+
+
+    function showCar(carId) {
+
+        const car = cars[carId];
+
+        document.getElementById("modalTitle").textContent =
+            car.title;
+
+        document.getElementById("modalSubtitle").textContent =
+            car.subtitle;
+
+        document.getElementById("modalImage").src =
+            car.image;
+
+        document.getElementById("modalImage").alt =
+            car.title;
+
+        document.getElementById("engine").textContent =
+            car.engine;
+
+        document.getElementById("power").textContent =
+            car.power;
+
+        document.getElementById("speed").textContent =
+            car.speed;
+
+        document.getElementById("drive").textContent =
+            car.drive;
+
+        document.getElementById("description").textContent =
+            car.description;
+
+        document.getElementById("carModal")
+            .classList.add("active");
+    }
+
+
+    function closeModal() {
+
+        document.getElementById("carModal")
+            .classList.remove("active");
+    }
+
+
+    // Закрытие при нажатии вне окна
+
+    document.getElementById("carModal")
+        .addEventListener("click", function(event) {
+
+            if (event.target === this) {
+
+                closeModal();
+
+            }
+
+        });
+
+
+    // Закрытие клавишей Escape
+
+    document.addEventListener("keydown", function(event) {
+
+        if (event.key === "Escape") {
+
+            closeModal();
+
+        }
+
+    });
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,204 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: #0b0b0f;
+    color: white;
+    min-height: 100vh;
+}
+
+/* Шапка */
+header {
+    text-align: center;
+    padding: 45px 20px;
+    background: linear-gradient(135deg, #11111a, #1c1c2b);
+    border-bottom: 1px solid #29293a;
+}
+
+header h1 {
+    font-size: 42px;
+    margin-bottom: 10px;
+}
+
+header p {
+    color: #aaa;
+    font-size: 18px;
+}
+
+/* Основная часть */
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 40px 20px;
+}
+
+.catalog-title {
+    text-align: center;
+    font-size: 32px;
+    margin-bottom: 35px;
+}
+
+/* Карточки */
+.cars {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+}
+
+.car {
+    background: #15151d;
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid #292936;
+    transition: 0.35s;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+.car:hover {
+    transform: translateY(-10px);
+    border-color: #6666ff;
+    box-shadow: 0 15px 40px rgba(80, 80, 255, 0.25);
+}
+
+/* Фото */
+.car img {
+    width: 100%;
+    height: 210px;
+    object-fit: cover;
+    display: block;
+}
+
+/* Информация */
+.car-info {
+    padding: 22px;
+}
+
+.car-info h2 {
+    font-size: 25px;
+    margin-bottom: 10px;
+}
+
+.description {
+    color: #aaa;
+    line-height: 1.5;
+    margin-bottom: 18px;
+}
+
+/* Характеристики */
+.stats {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.stats span {
+    background: #22222d;
+    padding: 8px 12px;
+    border-radius: 10px;
+    font-size: 14px;
+    color: #ddd;
+}
+
+/* Кнопка */
+button {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #5555ff, #8b5cff);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+button:hover {
+    transform: scale(1.03);
+    box-shadow: 0 8px 25px rgba(100, 80, 255, 0.4);
+}
+
+button:active {
+    transform: scale(0.97);
+}
+
+/* Окно */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.modal-content {
+    position: relative;
+    background: #181820;
+    padding: 30px;
+    border-radius: 20px;
+    max-width: 500px;
+    width: 100%;
+    border: 1px solid #333344;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+}
+
+.modal-content h2 {
+    margin-bottom: 15px;
+}
+
+.modal-content p {
+    color: #bbb;
+    line-height: 1.6;
+}
+
+.close {
+    position: absolute;
+    right: 20px;
+    top: 12px;
+    font-size: 30px;
+    cursor: pointer;
+    color: #aaa;
+}
+
+.close:hover {
+    color: white;
+}
+
+/* Подвал */
+footer {
+    text-align: center;
+    padding: 30px;
+    color: #777;
+    margin-top: 30px;
+}
+
+/* Телефон */
+@media (max-width: 600px) {
+
+    header h1 {
+        font-size: 32px;
+    }
+
+    header p {
+        font-size: 16px;
+    }
+
+    main {
+        padding: 30px 15px;
+    }
+
+    .catalog-title {
+        font-size: 27px;
+    }
+
+    .car img {
+        height: 190px;
+    }
+}
