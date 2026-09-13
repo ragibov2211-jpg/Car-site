@@ -1,0 +1,2146 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AutoVerse — Энциклопедия автомобилей</title>
+
+<style>
+*{
+    box-sizing:border-box;
+    margin:0;
+    padding:0;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#080b10;
+    color:#fff;
+    min-height:100vh;
+}
+
+header{
+    background:linear-gradient(135deg,#111722,#080b10);
+    padding:28px 18px;
+    text-align:center;
+    border-bottom:1px solid #252d3a;
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+header h1{
+    font-size:36px;
+    letter-spacing:2px;
+}
+
+header h1 span{
+    color:#ff3030;
+}
+
+header p{
+    color:#9ca6b5;
+    margin-top:8px;
+}
+
+.controls{
+    max-width:1250px;
+    margin:20px auto;
+    padding:0 15px;
+    display:flex;
+    flex-wrap:wrap;
+    gap:10px;
+}
+
+.search{
+    flex:1;
+    min-width:220px;
+    background:#111722;
+    border:1px solid #303a4b;
+    border-radius:12px;
+    color:white;
+    padding:14px 16px;
+    font-size:16px;
+    outline:none;
+}
+
+select{
+    background:#111722;
+    border:1px solid #303a4b;
+    border-radius:12px;
+    color:white;
+    padding:14px;
+    font-size:15px;
+    outline:none;
+}
+
+.container{
+    max-width:1250px;
+    margin:auto;
+    padding:0 15px 40px;
+}
+
+.count{
+    color:#8e99aa;
+    margin:10px 3px 18px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill,minmax(270px,1fr));
+    gap:18px;
+}
+
+.card{
+    background:#111722;
+    border:1px solid #252e3c;
+    border-radius:18px;
+    overflow:hidden;
+    transition:.25s;
+    box-shadow:0 10px 30px rgba(0,0,0,.25);
+}
+
+.card:hover{
+    transform:translateY(-5px);
+    border-color:#ff3030;
+}
+
+.car-image{
+    width:100%;
+    height:190px;
+    object-fit:cover;
+    display:block;
+    background:#171d27;
+}
+
+.card-body{
+    padding:17px;
+}
+
+.brand{
+    color:#ff3b3b;
+    text-transform:uppercase;
+    font-size:12px;
+    font-weight:bold;
+    letter-spacing:1px;
+}
+
+.card h2{
+    font-size:21px;
+    margin:5px 0 12px;
+}
+
+.stats{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:8px;
+    margin-bottom:14px;
+}
+
+.stat{
+    background:#181f2a;
+    padding:9px;
+    border-radius:9px;
+}
+
+.stat small{
+    display:block;
+    color:#7e8999;
+    font-size:11px;
+}
+
+.stat b{
+    font-size:14px;
+}
+
+.details-btn{
+    width:100%;
+    border:0;
+    border-radius:10px;
+    background:#e92828;
+    color:white;
+    padding:12px;
+    cursor:pointer;
+    font-weight:bold;
+    font-size:15px;
+}
+
+.details-btn:hover{
+    background:#ff4141;
+}
+
+.no-results{
+    text-align:center;
+    padding:60px 10px;
+    color:#8e99aa;
+    display:none;
+}
+
+.modal{
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,.82);
+    display:none;
+    justify-content:center;
+    align-items:center;
+    padding:18px;
+    z-index:500;
+}
+
+.modal.active{
+    display:flex;
+}
+
+.modal-box{
+    width:min(850px,100%);
+    max-height:90vh;
+    overflow:auto;
+    background:#111722;
+    border:1px solid #303a4b;
+    border-radius:20px;
+    position:relative;
+}
+
+.modal-img{
+    width:100%;
+    height:300px;
+    object-fit:cover;
+    background:#171d27;
+}
+
+.modal-content{
+    padding:24px;
+}
+
+.modal-content h2{
+    font-size:30px;
+    margin-bottom:8px;
+}
+
+.modal-content .description{
+    color:#adb6c4;
+    line-height:1.7;
+    margin-top:18px;
+}
+
+.info-grid{
+    display:grid;
+    grid-template-columns:repeat(2,1fr);
+    gap:10px;
+    margin-top:18px;
+}
+
+.info{
+    background:#181f2a;
+    padding:13px;
+    border-radius:10px;
+}
+
+.info span{
+    display:block;
+    color:#7e8999;
+    font-size:12px;
+    margin-bottom:4px;
+}
+
+.close{
+    position:absolute;
+    right:15px;
+    top:15px;
+    width:42px;
+    height:42px;
+    border:0;
+    border-radius:50%;
+    background:rgba(0,0,0,.7);
+    color:#fff;
+    font-size:24px;
+    cursor:pointer;
+    z-index:2;
+}
+
+footer{
+    text-align:center;
+    color:#697484;
+    padding:30px 15px;
+    border-top:1px solid #202734;
+}
+
+@media(max-width:600px){
+    header h1{
+        font-size:28px;
+    }
+
+    .grid{
+        grid-template-columns:1fr;
+    }
+
+    .modal-img{
+        height:220px;
+    }
+
+    .info-grid{
+        grid-template-columns:1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Auto<span>Verse</span></h1>
+    <p>Энциклопедия легендарных и современных автомобилей</p>
+</header>
+
+<div class="controls">
+    <input
+        id="search"
+        class="search"
+        type="text"
+        placeholder="🔎 Поиск машины или бренда..."
+        autocomplete="off"
+    >
+
+    <select id="brandFilter">
+        <option value="all">Все бренды</option>
+    </select>
+
+    <select id="categoryFilter">
+        <option value="all">Все категории</option>
+        <option value="supercar">Суперкары</option>
+        <option value="sport">Спорткары</option>
+        <option value="sedan">Седаны</option>
+        <option value="coupe">Купе</option>
+        <option value="suv">SUV</option>
+        <option value="jdm">JDM</option>
+        <option value="muscle">Muscle</option>
+        <option value="hypercar">Гиперкары</option>
+    </select>
+
+    <select id="sort">
+        <option value="default">Сортировка</option>
+        <option value="powerHigh">Мощность ↓</option>
+        <option value="powerLow">Мощность ↑</option>
+        <option value="speedHigh">Скорость ↓</option>
+        <option value="speedLow">Скорость ↑</option>
+        <option value="name">По названию</option>
+    </select>
+</div>
+
+<main class="container">
+    <div class="count" id="count"></div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="no-results" id="noResults">
+        <h2>Машина не найдена</h2>
+        <p>Попробуй изменить запрос или фильтры.</p>
+    </div>
+</main>
+
+<div class="modal" id="modal">
+    <div class="modal-box">
+        <button class="close" onclick="closeModal()">×</button>
+
+        <img id="modalImg" class="modal-img" src="" alt="">
+
+        <div class="modal-content">
+            <div class="brand" id="modalBrand"></div>
+            <h2 id="modalTitle"></h2>
+
+            <div class="info-grid">
+                <div class="info">
+                    <span>Двигатель</span>
+                    <b id="modalEngine"></b>
+                </div>
+
+                <div class="info">
+                    <span>Мощность</span>
+                    <b id="modalPower"></b>
+                </div>
+
+                <div class="info">
+                    <span>Максимальная скорость</span>
+                    <b id="modalSpeed"></b>
+                </div>
+
+                <div class="info">
+                    <span>Привод</span>
+                    <b id="modalDrive"></b>
+                </div>
+
+                <div class="info">
+                    <span>Разгон 0–100 км/ч</span>
+                    <b id="modalAccel"></b>
+                </div>
+
+                <div class="info">
+                    <span>Категория</span>
+                    <b id="modalCategory"></b>
+                </div>
+            </div>
+
+            <p class="description" id="modalDescription"></p>
+        </div>
+    </div>
+</div>
+
+<footer>
+    AutoVerse © 2026 — автомобильная энциклопедия
+</footer>
+
+<script>
+
+const cars = [
+
+{
+name:"BMW M3 G80",
+brand:"BMW",
+category:"sport",
+engine:"3.0L Twin-Turbo I6",
+power:503,
+speed:290,
+drive:"RWD / AWD",
+accel:"3.5 с",
+wiki:"BMW M3"
+},
+
+{
+name:"BMW M4 G82",
+brand:"BMW",
+category:"coupe",
+engine:"3.0L Twin-Turbo I6",
+power:503,
+speed:290,
+drive:"RWD / AWD",
+accel:"3.5 с",
+wiki:"BMW M4"
+},
+
+{
+name:"BMW M5 Competition",
+brand:"BMW",
+category:"sedan",
+engine:"4.4L Twin-Turbo V8",
+power:617,
+speed:305,
+drive:"AWD",
+accel:"3.3 с",
+wiki:"BMW M5"
+},
+
+{
+name:"BMW M8 Competition",
+brand:"BMW",
+category:"coupe",
+engine:"4.4L Twin-Turbo V8",
+power:617,
+speed:305,
+drive:"AWD",
+accel:"3.2 с",
+wiki:"BMW M8"
+},
+
+{
+name:"BMW i8",
+brand:"BMW",
+category:"sport",
+engine:"1.5L Turbo Hybrid",
+power:369,
+speed:250,
+drive:"AWD",
+accel:"4.4 с",
+wiki:"BMW i8"
+},
+
+{
+name:"Mercedes-AMG GT",
+brand:"Mercedes-Benz",
+category:"sport",
+engine:"4.0L Twin-Turbo V8",
+power:577,
+speed:318,
+drive:"RWD",
+accel:"3.2 с",
+wiki:"Mercedes-AMG GT"
+},
+
+{
+name:"Mercedes-AMG GT Black Series",
+brand:"Mercedes-Benz",
+category:"supercar",
+engine:"4.0L Twin-Turbo V8",
+power:720,
+speed:325,
+drive:"RWD",
+accel:"3.2 с",
+wiki:"Mercedes-AMG GT Black Series"
+},
+
+{
+name:"Mercedes-AMG C63",
+brand:"Mercedes-Benz",
+category:"sedan",
+engine:"2.0L Turbo Hybrid",
+power:671,
+speed:280,
+drive:"AWD",
+accel:"3.4 с",
+wiki:"Mercedes-AMG C 63"
+},
+
+{
+name:"Mercedes-Benz SLS AMG",
+brand:"Mercedes-Benz",
+category:"supercar",
+engine:"6.2L V8",
+power:563,
+speed:317,
+drive:"RWD",
+accel:"3.8 с",
+wiki:"Mercedes-Benz SLS AMG"
+},
+
+{
+name:"Mercedes-Benz SLR McLaren",
+brand:"Mercedes-Benz",
+category:"supercar",
+engine:"5.4L Supercharged V8",
+power:617,
+speed:334,
+drive:"RWD",
+accel:"3.8 с",
+wiki:"Mercedes-Benz SLR McLaren"
+},
+
+{
+name:"Audi R8 V10",
+brand:"Audi",
+category:"supercar",
+engine:"5.2L V10",
+power:602,
+speed:331,
+drive:"AWD",
+accel:"3.2 с",
+wiki:"Audi R8"
+},
+
+{
+name:"Audi RS6 Avant",
+brand:"Audi",
+category:"sport",
+engine:"4.0L Twin-Turbo V8",
+power:591,
+speed:305,
+drive:"AWD",
+accel:"3.6 с",
+wiki:"Audi RS 6"
+},
+
+{
+name:"Audi RS7",
+brand:"Audi",
+category:"sedan",
+engine:"4.0L Twin-Turbo V8",
+power:591,
+speed:305,
+drive:"AWD",
+accel:"3.6 с",
+wiki:"Audi RS 7"
+},
+
+{
+name:"Audi TT RS",
+brand:"Audi",
+category:"coupe",
+engine:"2.5L Turbo I5",
+power:394,
+speed:280,
+drive:"AWD",
+accel:"3.7 с",
+wiki:"Audi TT RS"
+},
+
+{
+name:"Audi Quattro",
+brand:"Audi",
+category:"sport",
+engine:"2.1L Turbo I5",
+power:200,
+speed:220,
+drive:"AWD",
+accel:"7.1 с",
+wiki:"Audi Quattro"
+},
+
+{
+name:"Porsche 911 GT3",
+brand:"Porsche",
+category:"sport",
+engine:"4.0L Flat-6",
+power:502,
+speed:318,
+drive:"RWD",
+accel:"3.4 с",
+wiki:"Porsche 911 GT3"
+},
+
+{
+name:"Porsche 911 Turbo S",
+brand:"Porsche",
+category:"supercar",
+engine:"3.7L Twin-Turbo Flat-6",
+power:640,
+speed:330,
+drive:"AWD",
+accel:"2.7 с",
+wiki:"Porsche 911"
+},
+
+{
+name:"Porsche 918 Spyder",
+brand:"Porsche",
+category:"hypercar",
+engine:"4.6L V8 Hybrid",
+power:887,
+speed:340,
+drive:"AWD",
+accel:"2.6 с",
+wiki:"Porsche 918 Spyder"
+},
+
+{
+name:"Porsche Carrera GT",
+brand:"Porsche",
+category:"supercar",
+engine:"5.7L V10",
+power:603,
+speed:334,
+drive:"RWD",
+accel:"3.9 с",
+wiki:"Porsche Carrera GT"
+},
+
+{
+name:"Porsche Cayman GT4",
+brand:"Porsche",
+category:"coupe",
+engine:"4.0L Flat-6",
+power:414,
+speed:304,
+drive:"RWD",
+accel:"4.4 с",
+wiki:"Porsche Cayman"
+},
+
+{
+name:"Ferrari 488 GTB",
+brand:"Ferrari",
+category:"supercar",
+engine:"3.9L Twin-Turbo V8",
+power:661,
+speed:330,
+drive:"RWD",
+accel:"3.0 с",
+wiki:"Ferrari 488"
+},
+
+{
+name:"Ferrari F8 Tributo",
+brand:"Ferrari",
+category:"supercar",
+engine:"3.9L Twin-Turbo V8",
+power:710,
+speed:340,
+drive:"RWD",
+accel:"2.9 с",
+wiki:"Ferrari F8 Tributo"
+},
+
+{
+name:"Ferrari LaFerrari",
+brand:"Ferrari",
+category:"hypercar",
+engine:"6.3L V12 Hybrid",
+power:950,
+speed:350,
+drive:"RWD",
+accel:"2.6 с",
+wiki:"LaFerrari"
+},
+
+{
+name:"Ferrari Enzo",
+brand:"Ferrari",
+category:"supercar",
+engine:"6.0L V12",
+power:651,
+speed:355,
+drive:"RWD",
+accel:"3.6 с",
+wiki:"Enzo Ferrari (automobile)"
+},
+
+{
+name:"Ferrari 812 Superfast",
+brand:"Ferrari",
+category:"supercar",
+engine:"6.5L V12",
+power:789,
+speed:340,
+drive:"RWD",
+accel:"2.9 с",
+wiki:"Ferrari 812 Superfast"
+},
+
+{
+name:"Lamborghini Aventador",
+brand:"Lamborghini",
+category:"supercar",
+engine:"6.5L V12",
+power:769,
+speed:350,
+drive:"AWD",
+accel:"2.8 с",
+wiki:"Lamborghini Aventador"
+},
+
+{
+name:"Lamborghini Huracán",
+brand:"Lamborghini",
+category:"supercar",
+engine:"5.2L V10",
+power:631,
+speed:325,
+drive:"AWD",
+accel:"2.9 с",
+wiki:"Lamborghini Huracán"
+},
+
+{
+name:"Lamborghini Revuelto",
+brand:"Lamborghini",
+category:"hypercar",
+engine:"6.5L V12 Hybrid",
+power:1001,
+speed:350,
+drive:"AWD",
+accel:"2.5 с",
+wiki:"Lamborghini Revuelto"
+},
+
+{
+name:"Lamborghini Murciélago",
+brand:"Lamborghini",
+category:"supercar",
+engine:"6.5L V12",
+power:631,
+speed:340,
+drive:"AWD",
+accel:"3.4 с",
+wiki:"Lamborghini Murciélago"
+},
+
+{
+name:"Lamborghini Gallardo",
+brand:"Lamborghini",
+category:"supercar",
+engine:"5.2L V10",
+power:552,
+speed:325,
+drive:"AWD",
+accel:"3.7 с",
+wiki:"Lamborghini Gallardo"
+},
+
+{
+name:"McLaren 720S",
+brand:"McLaren",
+category:"supercar",
+engine:"4.0L Twin-Turbo V8",
+power:710,
+speed:341,
+drive:"RWD",
+accel:"2.9 с",
+wiki:"McLaren 720S"
+},
+
+{
+name:"McLaren P1",
+brand:"McLaren",
+category:"hypercar",
+engine:"3.8L Twin-Turbo V8 Hybrid",
+power:903,
+speed:350,
+drive:"RWD",
+accel:"2.8 с",
+wiki:"McLaren P1"
+},
+
+{
+name:"McLaren Senna",
+brand:"McLaren",
+category:"hypercar",
+engine:"4.0L Twin-Turbo V8",
+power:789,
+speed:335,
+drive:"RWD",
+accel:"2.8 с",
+wiki:"McLaren Senna"
+},
+
+{
+name:"McLaren F1",
+brand:"McLaren",
+category:"supercar",
+engine:"6.1L V12",
+power:618,
+speed:386,
+drive:"RWD",
+accel:"3.2 с",
+wiki:"McLaren F1"
+},
+
+{
+name:"Bugatti Chiron",
+brand:"Bugatti",
+category:"hypercar",
+engine:"8.0L Quad-Turbo W16",
+power:1479,
+speed:420,
+drive:"AWD",
+accel:"2.4 с",
+wiki:"Bugatti Chiron"
+},
+
+{
+name:"Bugatti Veyron",
+brand:"Bugatti",
+category:"hypercar",
+engine:"8.0L Quad-Turbo W16",
+power:987,
+speed:407,
+drive:"AWD",
+accel:"2.5 с",
+wiki:"Bugatti Veyron"
+},
+
+{
+name:"Bugatti Divo",
+brand:"Bugatti",
+category:"hypercar",
+engine:"8.0L Quad-Turbo W16",
+power:1479,
+speed:380,
+drive:"AWD",
+accel:"2.4 с",
+wiki:"Bugatti Divo"
+},
+
+{
+name:"Koenigsegg Jesko",
+brand:"Koenigsegg",
+category:"hypercar",
+engine:"5.0L Twin-Turbo V8",
+power:1281,
+speed:482,
+drive:"RWD",
+accel:"≈2.5 с",
+wiki:"Koenigsegg Jesko"
+},
+
+{
+name:"Koenigsegg Agera RS",
+brand:"Koenigsegg",
+category:"hypercar",
+engine:"5.0L Twin-Turbo V8",
+power:1160,
+speed:447,
+drive:"RWD",
+accel:"2.8 с",
+wiki:"Koenigsegg Agera RS"
+},
+
+{
+name:"Koenigsegg Regera",
+brand:"Koenigsegg",
+category:"hypercar",
+engine:"5.0L Twin-Turbo V8 Hybrid",
+power:1500,
+speed:410,
+drive:"RWD",
+accel:"2.8 с",
+wiki:"Koenigsegg Regera"
+},
+
+{
+name:"Pagani Huayra",
+brand:"Pagani",
+category:"hypercar",
+engine:"6.0L Twin-Turbo V12",
+power:720,
+speed:383,
+drive:"RWD",
+accel:"3.0 с",
+wiki:"Pagani Huayra"
+},
+
+{
+name:"Pagani Zonda",
+brand:"Pagani",
+category:"supercar",
+engine:"7.3L V12",
+power:678,
+speed:350,
+drive:"RWD",
+accel:"3.4 с",
+wiki:"Pagani Zonda"
+},
+
+{
+name:"Nissan Skyline GT-R R34",
+brand:"Nissan",
+category:"jdm",
+engine:"2.6L Twin-Turbo I6",
+power:276,
+speed:250,
+drive:"AWD",
+accel:"4.9 с",
+wiki:"Nissan Skyline GT-R"
+},
+
+{
+name:"Nissan Skyline GT-R R32",
+brand:"Nissan",
+category:"jdm",
+engine:"2.6L Twin-Turbo I6",
+power:276,
+speed:180,
+drive:"AWD",
+accel:"5.6 с",
+wiki:"Nissan Skyline GT-R"
+},
+
+{
+name:"Nissan GT-R R35",
+brand:"Nissan",
+category:"sport",
+engine:"3.8L Twin-Turbo V6",
+power:565,
+speed:315,
+drive:"AWD",
+accel:"2.9 с",
+wiki:"Nissan GT-R"
+},
+
+{
+name:"Nissan 370Z",
+brand:"Nissan",
+category:"coupe",
+engine:"3.7L V6",
+power:332,
+speed:250,
+drive:"RWD",
+accel:"5.1 с",
+wiki:"Nissan 370Z"
+},
+
+{
+name:"Nissan Silvia S15",
+brand:"Nissan",
+category:"jdm",
+engine:"2.0L Turbo I4",
+power:247,
+speed:235,
+drive:"RWD",
+accel:"5.5 с",
+wiki:"Nissan Silvia"
+},
+
+{
+name:"Toyota Supra MK4",
+brand:"Toyota",
+category:"jdm",
+engine:"3.0L Twin-Turbo I6",
+power:276,
+speed:250,
+drive:"RWD",
+accel:"4.9 с",
+wiki:"Toyota Supra"
+},
+
+{
+name:"Toyota GR Supra",
+brand:"Toyota",
+category:"sport",
+engine:"3.0L Turbo I6",
+power:382,
+speed:250,
+drive:"RWD",
+accel:"3.9 с",
+wiki:"Toyota GR Supra"
+},
+
+{
+name:"Toyota AE86",
+brand:"Toyota",
+category:"jdm",
+engine:"1.6L I4",
+power:128,
+speed:201,
+drive:"RWD",
+accel:"8.5 с",
+wiki:"Toyota AE86"
+},
+
+{
+name:"Toyota GR Yaris",
+brand:"Toyota",
+category:"sport",
+engine:"1.6L Turbo I3",
+power:268,
+speed:230,
+drive:"AWD",
+accel:"5.2 с",
+wiki:"Toyota GR Yaris"
+},
+
+{
+name:"Honda NSX",
+brand:"Honda",
+category:"supercar",
+engine:"3.5L Twin-Turbo V6 Hybrid",
+power:573,
+speed:307,
+drive:"AWD",
+accel:"2.9 с",
+wiki:"Honda NSX"
+},
+
+{
+name:"Honda Civic Type R",
+brand:"Honda",
+category:"sport",
+engine:"2.0L Turbo I4",
+power:315,
+speed:272,
+drive:"FWD",
+accel:"5.4 с",
+wiki:"Honda Civic Type R"
+},
+
+{
+name:"Honda S2000",
+brand:"Honda",
+category:"jdm",
+engine:"2.0L I4",
+power:247,
+speed:241,
+drive:"RWD",
+accel:"5.8 с",
+wiki:"Honda S2000"
+},
+
+{
+name:"Mazda RX-7 FD",
+brand:"Mazda",
+category:"jdm",
+engine:"1.3L Twin-Turbo Rotary",
+power:276,
+speed:250,
+drive:"RWD",
+accel:"5.3 с",
+wiki:"Mazda RX-7"
+},
+
+{
+name:"Mazda RX-8",
+brand:"Mazda",
+category:"sport",
+engine:"1.3L Rotary",
+power:238,
+speed:235,
+drive:"RWD",
+accel:"6.4 с",
+wiki:"Mazda RX-8"
+},
+
+{
+name:"Subaru Impreza WRX STI",
+brand:"Subaru",
+category:"jdm",
+engine:"2.5L Turbo Boxer-4",
+power:305,
+speed:255,
+drive:"AWD",
+accel:"4.8 с",
+wiki:"Subaru Impreza WRX STI"
+},
+
+{
+name:"Mitsubishi Lancer Evolution IX",
+brand:"Mitsubishi",
+category:"jdm",
+engine:"2.0L Turbo I4",
+power:286,
+speed:250,
+drive:"AWD",
+accel:"5.2 с",
+wiki:"Mitsubishi Lancer Evolution"
+},
+
+{
+name:"Mitsubishi Lancer Evolution X",
+brand:"Mitsubishi",
+category:"jdm",
+engine:"2.0L Turbo I4",
+power:291,
+speed:242,
+drive:"AWD",
+accel:"5.4 с",
+wiki:"Mitsubishi Lancer Evolution"
+},
+
+{
+name:"Ford Mustang GT",
+brand:"Ford",
+category:"muscle",
+engine:"5.0L V8",
+power:480,
+speed:250,
+drive:"RWD",
+accel:"4.2 с",
+wiki:"Ford Mustang"
+},
+
+{
+name:"Ford Mustang Shelby GT500",
+brand:"Ford",
+category:"muscle",
+engine:"5.2L Supercharged V8",
+power:760,
+speed:290,
+drive:"RWD",
+accel:"3.3 с",
+wiki:"Ford Mustang Shelby GT500"
+},
+
+{
+name:"Ford GT",
+brand:"Ford",
+category:"supercar",
+engine:"3.5L Twin-Turbo V6",
+power:660,
+speed:348,
+drive:"RWD",
+accel:"3.0 с",
+wiki:"Ford GT"
+},
+
+{
+name:"Chevrolet Corvette C8",
+brand:"Chevrolet",
+category:"supercar",
+engine:"6.2L V8",
+power:495,
+speed:312,
+drive:"RWD",
+accel:"2.9 с",
+wiki:"Chevrolet Corvette"
+},
+
+{
+name:"Chevrolet Camaro ZL1",
+brand:"Chevrolet",
+category:"muscle",
+engine:"6.2L Supercharged V8",
+power:650,
+speed:318,
+drive:"RWD",
+accel:"3.5 с",
+wiki:"Chevrolet Camaro"
+},
+
+{
+name:"Dodge Challenger SRT Hellcat",
+brand:"Dodge",
+category:"muscle",
+engine:"6.2L Supercharged V8",
+power:717,
+speed:320,
+drive:"RWD",
+accel:"3.6 с",
+wiki:"Dodge Challenger"
+},
+
+{
+name:"Dodge Charger SRT Hellcat",
+brand:"Dodge",
+category:"muscle",
+engine:"6.2L Supercharged V8",
+power:717,
+speed:315,
+drive:"RWD",
+accel:"3.6 с",
+wiki:"Dodge Charger"
+},
+
+{
+name:"Dodge Viper ACR",
+brand:"Dodge",
+category:"supercar",
+engine:"8.4L V10",
+power:645,
+speed:285,
+drive:"RWD",
+accel:"3.4 с",
+wiki:"Dodge Viper"
+},
+
+{
+name:"Tesla Model S Plaid",
+brand:"Tesla",
+category:"sedan",
+engine:"Tri-Motor Electric",
+power:1020,
+speed:322,
+drive:"AWD",
+accel:"2.1 с",
+wiki:"Tesla Model S"
+},
+
+{
+name:"Tesla Roadster",
+brand:"Tesla",
+category:"sport",
+engine:"Electric",
+power:1000,
+speed:400,
+drive:"AWD",
+accel:"≈2.0 с",
+wiki:"Tesla Roadster (second generation)"
+},
+
+{
+name:"Lexus LFA",
+brand:"Lexus",
+category:"supercar",
+engine:"4.8L V10",
+power:552,
+speed:325,
+drive:"RWD",
+accel:"3.7 с",
+wiki:"Lexus LFA"
+},
+
+{
+name:"Lexus RC F",
+brand:"Lexus",
+category:"coupe",
+engine:"5.0L V8",
+power:472,
+speed:270,
+drive:"RWD",
+accel:"4.2 с",
+wiki:"Lexus RC F"
+},
+
+{
+name:"Acura NSX",
+brand:"Acura",
+category:"supercar",
+engine:"3.5L Twin-Turbo V6 Hybrid",
+power:573,
+speed:307,
+drive:"AWD",
+accel:"2.9 с",
+wiki:"Honda NSX"
+},
+
+{
+name:"Infiniti Q60 Red Sport",
+brand:"Infiniti",
+category:"coupe",
+engine:"3.0L Twin-Turbo V6",
+power:400,
+speed:250,
+drive:"RWD / AWD",
+accel:"4.5 с",
+wiki:"Infiniti Q60"
+},
+
+{
+name:"Volkswagen Golf R",
+brand:"Volkswagen",
+category:"sport",
+engine:"2.0L Turbo I4",
+power:315,
+speed:270,
+drive:"AWD",
+accel:"4.7 с",
+wiki:"Volkswagen Golf Mk8"
+},
+
+{
+name:"Volkswagen Golf GTI",
+brand:"Volkswagen",
+category:"sport",
+engine:"2.0L Turbo I4",
+power:241,
+speed:250,
+drive:"FWD",
+accel:"5.9 с",
+wiki:"Volkswagen Golf Mk8"
+},
+
+{
+name:"Volkswagen Scirocco R",
+brand:"Volkswagen",
+category:"coupe",
+engine:"2.0L Turbo I4",
+power:276,
+speed:250,
+drive:"FWD",
+accel:"5.5 с",
+wiki:"Volkswagen Scirocco"
+},
+
+{
+name:"Renault Megane RS",
+brand:"Renault",
+category:"sport",
+engine:"1.8L Turbo I4",
+power:296,
+speed:255,
+drive:"FWD",
+accel:"5.7 с",
+wiki:"Renault Mégane RS"
+},
+
+{
+name:"Alpine A110",
+brand:"Alpine",
+category:"sport",
+engine:"1.8L Turbo I4",
+power:249,
+speed:250,
+drive:"RWD",
+accel:"4.5 с",
+wiki:"Alpine A110"
+},
+
+{
+name:"Lotus Evora",
+brand:"Lotus",
+category:"sport",
+engine:"3.5L Supercharged V6",
+power:416,
+speed:303,
+drive:"RWD",
+accel:"4.1 с",
+wiki:"Lotus Evora"
+},
+
+{
+name:"Lotus Emira",
+brand:"Lotus",
+category:"sport",
+engine:"3.5L Supercharged V6",
+power:400,
+speed:290,
+drive:"RWD",
+accel:"4.3 с",
+wiki:"Lotus Emira"
+},
+
+{
+name:"Aston Martin DB11",
+brand:"Aston Martin",
+category:"coupe",
+engine:"5.2L Twin-Turbo V12",
+power:630,
+speed:334,
+drive:"RWD",
+accel:"3.7 с",
+wiki:"Aston Martin DB11"
+},
+
+{
+name:"Aston Martin Vantage",
+brand:"Aston Martin",
+category:"sport",
+engine:"4.0L Twin-Turbo V8",
+power:656,
+speed:325,
+drive:"RWD",
+accel:"3.4 с",
+wiki:"Aston Martin Vantage"
+},
+
+{
+name:"Aston Martin Valkyrie",
+brand:"Aston Martin",
+category:"hypercar",
+engine:"6.5L V12 Hybrid",
+power:1160,
+speed:402,
+drive:"RWD",
+accel:"≈2.5 с",
+wiki:"Aston Martin Valkyrie"
+},
+
+{
+name:"Jaguar F-Type R",
+brand:"Jaguar",
+category:"coupe",
+engine:"5.0L Supercharged V8",
+power:575,
+speed:300,
+drive:"AWD",
+accel:"3.7 с",
+wiki:"Jaguar F-Type"
+},
+
+{
+name:"Jaguar XJ220",
+brand:"Jaguar",
+category:"supercar",
+engine:"3.5L Twin-Turbo V6",
+power:542,
+speed:341,
+drive:"RWD",
+accel:"3.8 с",
+wiki:"Jaguar XJ220"
+},
+
+{
+name:"Volvo S60 Polestar",
+brand:"Volvo",
+category:"sedan",
+engine:"2.0L Turbo Hybrid",
+power:455,
+speed:250,
+drive:"AWD",
+accel:"4.6 с",
+wiki:"Volvo S60"
+},
+
+{
+name:"Polestar 1",
+brand:"Polestar",
+category:"coupe",
+engine:"2.0L Turbo Hybrid",
+power:619,
+speed:250,
+drive:"AWD",
+accel:"4.2 с",
+wiki:"Polestar 1"
+},
+
+{
+name:"Rolls-Royce Wraith",
+brand:"Rolls-Royce",
+category:"coupe",
+engine:"6.6L Twin-Turbo V12",
+power:624,
+speed:250,
+drive:"RWD",
+accel:"4.6 с",
+wiki:"Rolls-Royce Wraith"
+},
+
+{
+name:"Bentley Continental GT",
+brand:"Bentley",
+category:"coupe",
+engine:"6.0L Twin-Turbo W12",
+power:650,
+speed:335,
+drive:"AWD",
+accel:"3.6 с",
+wiki:"Bentley Continental GT"
+},
+
+{
+name:"Maserati MC20",
+brand:"Maserati",
+category:"supercar",
+engine:"3.0L Twin-Turbo V6",
+power:621,
+speed:325,
+drive:"RWD",
+accel:"2.9 с",
+wiki:"Maserati MC20"
+},
+
+{
+name:"Maserati GranTurismo",
+brand:"Maserati",
+category:"coupe",
+engine:"3.0L Twin-Turbo V6",
+power:542,
+speed:302,
+drive:"AWD",
+accel:"3.5 с",
+wiki:"Maserati GranTurismo"
+},
+
+{
+name:"Noble M600",
+brand:"Noble",
+category:"supercar",
+engine:"4.4L Twin-Turbo V8",
+power:650,
+speed:362,
+drive:"RWD",
+accel:"3.0 с",
+wiki:"Noble M600"
+},
+
+{
+name:"Saleen S7",
+brand:"Saleen",
+category:"supercar",
+engine:"7.0L Twin-Turbo V8",
+power:750,
+speed:399,
+drive:"RWD",
+accel:"2.8 с",
+wiki:"Saleen S7"
+},
+
+{
+name:"Hennessey Venom GT",
+brand:"Hennessey",
+category:"hypercar",
+engine:"7.0L Twin-Turbo V8",
+power:1244,
+speed:435,
+drive:"RWD",
+accel:"2.7 с",
+wiki:"Hennessey Venom GT"
+},
+
+{
+name:"Rimac Nevera",
+brand:"Rimac",
+category:"hypercar",
+engine:"Quad-Motor Electric",
+power:1914,
+speed:412,
+drive:"AWD",
+accel:"1.81 с",
+wiki:"Rimac Nevera"
+},
+
+{
+name:"Lucid Air Sapphire",
+brand:"Lucid",
+category:"sedan",
+engine:"Tri-Motor Electric",
+power:1234,
+speed:330,
+drive:"AWD",
+accel:"1.89 с",
+wiki:"Lucid Air"
+},
+
+{
+name:"Toyota Land Cruiser 300",
+brand:"Toyota",
+category:"suv",
+engine:"3.5L Twin-Turbo V6",
+power:409,
+speed:210,
+drive:"AWD",
+accel:"6.7 с",
+wiki:"Toyota Land Cruiser"
+},
+
+{
+name:"Range Rover Sport SV",
+brand:"Land Rover",
+category:"suv",
+engine:"4.4L Twin-Turbo V8",
+power:626,
+speed:290,
+drive:"AWD",
+accel:"3.8 с",
+wiki:"Range Rover Sport"
+},
+
+{
+name:"Porsche Cayenne Turbo GT",
+brand:"Porsche",
+category:"suv",
+engine:"4.0L Twin-Turbo V8",
+power:650,
+speed:305,
+drive:"AWD",
+accel:"3.3 с",
+wiki:"Porsche Cayenne"
+},
+
+{
+name:"Lamborghini Urus",
+brand:"Lamborghini",
+category:"suv",
+engine:"4.0L Twin-Turbo V8",
+power:657,
+speed:305,
+drive:"AWD",
+accel:"3.5 с",
+wiki:"Lamborghini Urus"
+},
+
+{
+name:"BMW XM",
+brand:"BMW",
+category:"suv",
+engine:"4.4L Twin-Turbo V8 Hybrid",
+power:738,
+speed:270,
+drive:"AWD",
+accel:"3.8 с",
+wiki:"BMW XM"
+},
+
+{
+name:"Mercedes-AMG G 63",
+brand:"Mercedes-Benz",
+category:"suv",
+engine:"4.0L Twin-Turbo V8",
+power:577,
+speed:240,
+drive:"AWD",
+accel:"4.5 с",
+wiki:"Mercedes-Benz G-Class"
+},
+
+{
+name:"Jeep Grand Cherokee Trackhawk",
+brand:"Jeep",
+category:"suv",
+engine:"6.2L Supercharged V8",
+power:707,
+speed:290,
+drive:"AWD",
+accel:"3.5 с",
+wiki:"Jeep Grand Cherokee"
+},
+
+{
+name:"Nissan Patrol Nismo",
+brand:"Nissan",
+category:"suv",
+engine:"5.6L V8",
+power:428,
+speed:210,
+drive:"AWD",
+accel:"6.1 с",
+wiki:"Nissan Patrol"
+},
+
+{
+name:"Ford Bronco Raptor",
+brand:"Ford",
+category:"suv",
+engine:"3.0L Twin-Turbo V6",
+power:418,
+speed:161,
+drive:"4WD",
+accel:"5.6 с",
+wiki:"Ford Bronco"
+},
+
+{
+name:"Toyota GR86",
+brand:"Toyota",
+category:"coupe",
+engine:"2.4L Boxer-4",
+power:228,
+speed:226,
+drive:"RWD",
+accel:"6.1 с",
+wiki:"Toyota 86"
+},
+
+{
+name:"Subaru BRZ",
+brand:"Subaru",
+category:"coupe",
+engine:"2.4L Boxer-4",
+power:228,
+speed:226,
+drive:"RWD",
+accel:"6.1 с",
+wiki:"Subaru BRZ"
+},
+
+{
+name:"Nissan 180SX",
+brand:"Nissan",
+category:"jdm",
+engine:"2.0L Turbo I4",
+power:202,
+speed:220,
+drive:"RWD",
+accel:"6.7 с",
+wiki:"Nissan 180SX"
+},
+
+{
+name:"Toyota Celica GT-Four",
+brand:"Toyota",
+category:"jdm",
+engine:"2.0L Turbo I4",
+power:239,
+speed:230,
+drive:"AWD",
+accel:"6.0 с",
+wiki:"Toyota Celica GT-Four"
+},
+
+{
+name:"Mitsubishi Eclipse GSX",
+brand:"Mitsubishi",
+category:"jdm",
+engine:"2.0L Turbo I4",
+power:210,
+speed:220,
+drive:"AWD",
+accel:"6.5 с",
+wiki:"Mitsubishi Eclipse"
+},
+
+{
+name:"Honda Integra Type R",
+brand:"Honda",
+category:"jdm",
+engine:"1.8L I4",
+power:195,
+speed:233,
+drive:"FWD",
+accel:"6.7 с",
+wiki:"Honda Integra"
+},
+
+{
+name:"Acura Integra Type S",
+brand:"Acura",
+category:"sport",
+engine:"1.5L Turbo I4",
+power:320,
+speed:270,
+drive:"FWD",
+accel:"5.2 с",
+wiki:"Acura Integra"
+}
+
+];
+
+const categoryNames = {
+    supercar:"Суперкар",
+    sport:"Спорткар",
+    sedan:"Седан",
+    coupe:"Купе",
+    suv:"SUV",
+    jdm:"JDM",
+    muscle:"Muscle",
+    hypercar:"Гиперкар"
+};
+
+const grid = document.getElementById("grid");
+const search = document.getElementById("search");
+const brandFilter = document.getElementById("brandFilter");
+const categoryFilter = document.getElementById("categoryFilter");
+const sort = document.getElementById("sort");
+const count = document.getElementById("count");
+const noResults = document.getElementById("noResults");
+
+let imageCache = {};
+
+const brands = [...new Set(cars.map(car => car.brand))].sort();
+
+brands.forEach(brand => {
+    const option = document.createElement("option");
+    option.value = brand;
+    option.textContent = brand;
+    brandFilter.appendChild(option);
+});
+
+function escapeHTML(text){
+    return String(text)
+        .replaceAll("&","&amp;")
+        .replaceAll("<","&lt;")
+        .replaceAll(">","&gt;")
+        .replaceAll('"',"&quot;")
+        .replaceAll("'","&#039;");
+}
+
+/*
+    Изображения берутся автоматически из Wikipedia.
+
+    Важно:
+    сайт сначала пытается найти страницу именно данной модели.
+    Если Wikipedia не возвращает фотографию, вместо чужой
+    фотографии показывается безопасная заглушка с названием.
+
+    Благодаря этому мы НЕ показываем фотографию другой машины
+    под неправильным названием.
+*/
+
+function placeholder(car){
+    const svg = `
+    <svg xmlns="http://www.w3.org/2000/svg" width="900" height="550">
+        <rect width="100%" height="100%" fill="#171d27"/>
+        <text x="50%" y="45%" text-anchor="middle"
+              fill="#ffffff" font-size="42"
+              font-family="Arial">${escapeHTML(car.brand)}</text>
+        <text x="50%" y="58%" text-anchor="middle"
+              fill="#ff4040" font-size="30"
+              font-family="Arial">${escapeHTML(car.name)}</text>
+        <text x="50%" y="72%" text-anchor="middle"
+              fill="#8c97a7" font-size="20"
+              font-family="Arial">Фото не найдено</text>
+    </svg>`;
+
+    return "data:image/svg+xml;charset=UTF-8," + encodeURIComponent(svg);
+}
+
+async function getCarImage(car){
+
+    if(imageCache[car.name]){
+        return imageCache[car.name];
+    }
+
+    const fallback = placeholder(car);
+
+    try{
+
+        const query = encodeURIComponent(
+            car.wiki + " automobile"
+        );
+
+        const url =
+            "https://en.wikipedia.org/w/api.php" +
+            "?action=query" +
+            "&generator=search" +
+            "&gsrsearch=" + query +
+            "&gsrnamespace=0" +
+            "&gsrlimit=5" +
+            "&prop=pageimages" +
+            "&piprop=thumbnail" +
+            "&pithumbsize=900" +
+            "&format=json" +
+            "&origin=*";
+
+        const response = await fetch(url);
+
+        if(!response.ok){
+            imageCache[car.name] = fallback;
+            return fallback;
+        }
+
+        const data = await response.json();
+
+        if(!data.query || !data.query.pages){
+            imageCache[car.name] = fallback;
+            return fallback;
+        }
+
+        const pages = Object.values(data.query.pages);
+
+        /*
+            Берём только изображения, которые Wikipedia сама
+            связывает с найденной статьёй. Если подходящей
+            картинки нет — остаётся заглушка.
+        */
+
+        let page = pages.find(p =>
+            p.thumbnail &&
+            p.thumbnail.source
+        );
+
+        if(!page){
+            imageCache[car.name] = fallback;
+            return fallback;
+        }
+
+        imageCache[car.name] = page.thumbnail.source;
+        return page.thumbnail.source;
+
+    }catch(error){
+
+        imageCache[car.name] = fallback;
+        return fallback;
+    }
+}
+
+function createCard(car,index){
+
+    const card = document.createElement("article");
+    card.className = "card";
+
+    card.innerHTML = `
+        <img
+            class="car-image"
+            id="car-image-${index}"
+            src="${placeholder(car)}"
+            alt="${escapeHTML(car.name)}"
+        >
+
+        <div class="card-body">
+
+            <div class="brand">
+                ${escapeHTML(car.brand)}
+            </div>
+
+            <h2>${escapeHTML(car.name)}</h2>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <small>Мощность</small>
+                    <b>${escapeHTML(car.power)} л.с.</b>
+                </div>
+
+                <div class="stat">
+                    <small>Максимальная скорость</small>
+                    <b>${escapeHTML(car.speed)} км/ч</b>
+                </div>
+
+                <div class="stat">
+                    <small>Двигатель</small>
+                    <b>${escapeHTML(car.engine)}</b>
+                </div>
+
+                <div class="stat">
+                    <small>Привод</small>
+                    <b>${escapeHTML(car.drive)}</b>
+                </div>
+
+            </div>
+
+            <button
+                class="details-btn"
+                onclick="openModal(${index})">
+                Подробнее
+            </button>
+
+        </div>
+    `;
+
+    grid.appendChild(card);
+
+    getCarImage(car).then(src => {
+
+        const img = document.getElementById(
+            "car-image-" + index
+        );
+
+        if(img){
+            img.src = src;
+        }
+
+    });
+}
+
+function render(){
+
+    let result = [...cars];
+
+    const text =
+        search.value
+        .trim()
+        .toLowerCase();
+
+    const brand =
+        brandFilter.value;
+
+    const category =
+        categoryFilter.value;
+
+    if(text){
+
+        result = result.filter(car =>
+
+            car.name.toLowerCase().includes(text) ||
+
+            car.brand.toLowerCase().includes(text) ||
+
+            car.engine.toLowerCase().includes(text)
+
+        );
+
+    }
+
+    if(brand !== "all"){
+
+        result =
+            result.filter(car =>
+                car.brand === brand
+            );
+
+    }
+
+    if(category !== "all"){
+
+        result =
+            result.filter(car =>
+                car.category === category
+            );
+
+    }
+
+    switch(sort.value){
+
+        case "powerHigh":
+            result.sort((a,b) => b.power-a.power);
+            break;
+
+        case "powerLow":
+            result.sort((a,b) => a.power-b.power);
+            break;
+
+        case "speedHigh":
+            result.sort((a,b) => b.speed-a.speed);
+            break;
+
+        case "speedLow":
+            result.sort((a,b) => a.speed-b.speed);
+            break;
+
+        case "name":
+            result.sort((a,b) =>
+                a.name.localeCompare(
+                    b.name,
+                    "ru"
+                )
+            );
+            break;
+
+    }
+
+    grid.innerHTML = "";
+
+    count.textContent =
+        `Показано автомобилей: ${result.length} из ${cars.length}`;
+
+    noResults.style.display =
+        result.length === 0
+        ? "block"
+        : "none";
+
+    result.forEach((car) => {
+
+        const originalIndex =
+            cars.indexOf(car);
+
+        createCard(
+            car,
+            originalIndex
+        );
+
+    });
+}
+
+function openModal(index){
+
+    const car = cars[index];
+
+    document.getElementById("modalBrand")
+        .textContent = car.brand;
+
+    document.getElementById("modalTitle")
+        .textContent = car.name;
+
+    document.getElementById("modalEngine")
+        .textContent = car.engine;
+
+    document.getElementById("modalPower")
+        .textContent = car.power + " л.с.";
+
+    document.getElementById("modalSpeed")
+        .textContent = car.speed + " км/ч";
+
+    document.getElementById("modalDrive")
+        .textContent = car.drive;
+
+    document.getElementById("modalAccel")
+        .textContent = car.accel;
+
+    document.getElementById("modalCategory")
+        .textContent =
+        categoryNames[car.category] ||
+        car.category;
+
+    document.getElementById("modalDescription")
+        .textContent =
+        `${car.name} — автомобиль марки ${car.brand}. ` +
+        `Модель оснащается двигателем ${car.engine}, ` +
+        `развивает около ${car.power} л.с. и имеет ` +
+        `заявленную максимальную скорость ${car.speed} км/ч. ` +
+        `Привод — ${car.drive}.`;
+
+    const modalImg =
+        document.getElementById("modalImg");
+
+    modalImg.src =
+        imageCache[car.name] ||
+        placeholder(car);
+
+    modalImg.alt = car.name;
+
+    document
+        .getElementById("modal")
+        .classList.add("active");
+
+    document.body.style.overflow = "hidden";
+
+    getCarImage(car).then(src => {
+        modalImg.src = src;
+    });
+}
+
+function closeModal(){
+
+    document
+        .getElementById("modal")
+        .classList.remove("active");
+
+    document.body.style.overflow = "";
+}
+
+document
+    .getElementById("modal")
+    .addEventListener("click",function(e){
+
+        if(e.target === this){
+            closeModal();
+        }
+
+    });
+
+document.addEventListener("keydown",function(e){
+
+    if(e.key === "Escape"){
+        closeModal();
+    }
+
+});
+
+search.addEventListener("input",render);
+
+brandFilter.addEventListener("change",render);
+
+categoryFilter.addEventListener("change",render);
+
+sort.addEventListener("change",render);
+
+render();
+
+</script>
+
+</body>
+  </html>
